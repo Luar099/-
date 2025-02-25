@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Você ainda gosta de mim?</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background: white; overflow: hidden; text-align: center; }
+        .container { transition: transform 0.6s ease-in-out; position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .hidden { display: none; }
+        button { padding: 10px 20px; margin: 10px; font-size: 18px; cursor: pointer; border: none; background: #ff4081; color: white; border-radius: 5px; }
+        button:hover { background: #e91e63; }
+        .image-container { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 20px; }
+        .image-box { text-align: center; }
+        img { width: 250px; border-radius: 10px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <!-- Música de fundo -->
+    <audio id="backgroundMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Primeira Pergunta -->
+    <div class="container" id="step1">
+        <h1>Você ainda gosta de mim? 🥰💖</h1>
+        <div>
+            <button onclick="startMusic(); nextStep()">Sim 💕</button>
+            <button onclick="showConfirmation()">Não 💔</button>
+        </div>
+        <p id="confirmation" class="hidden">Você tem certeza? 😢 <button onclick="hideConfirmation()">Não 🙃</button></p>
+    </div>
+    
+    <!-- Introdução -->
+    <div class="container hidden" id="step2">
+        <h1>Que tal lembrarmos como isso começou? 💖✨</h1>
+        <button onclick="nextStep()">Continuar ➡️</button>
+    </div>
+    
+    <!-- Imagens e Memórias -->
+    <div class="container hidden" id="step3">
+        <div class="image-container">
+            <div class="image-box">
+                <img src="https://imgur.com/9DZ2c1m.jpg" alt="Primeira vez que saímos">
+                <p>Primeira vez que saímos só nós dois 👫</p>
+            </div>
+            <div class="image-box">
+                <img src="https://imgur.com/ejdntH4.jpg" alt="Primeira vez que dormi na sua casa">
+                <p>Primeira vez que dormi na sua casa 😴</p>
+            </div>
+        </div>
+        <button onclick="nextStep()">Próximo ➡️</button>
+    </div>
+
+    <div class="container hidden" id="step4">
+        <div class="image-container">
+            <div class="image-box">
+                <img src="https://imgur.com/TU7PvIU.jpg" alt="Primeira festa juntos">
+                <p>Primeira festa juntos 🎉</p>
+            </div>
+            <div class="image-box">
+                <img src="https://imgur.com/PXYGsFh.jpg" alt="Primeira vez na casa do seu pai">
+                <p>Primeira vez que fui na casa do seu pai 🏡</p>
+            </div>
+        </div>
+        <button onclick="nextStep()">Próximo ➡️</button>
+    </div>
+
+    <div class="container hidden" id="step5">
+        <div class="image-container">
+            <div class="image-box">
+                <img src="https://imgur.com/sOsKpqB.jpg" alt="Seu aniversário de 18 anos">
+                <p>Seu aniversário de 18 🎂</p>
+            </div>
+            <div class="image-box">
+                <img src="https://imgur.com/cNsRdBC.jpg" alt="Nós no ju cuidando da maninha">
+                <p>Nós no ju cuidando da maninha ❤️</p>
+            </div>
+        </div>
+        <button onclick="nextStep()">Próximo ➡️</button>
+    </div>
+
+    <div class="container hidden" id="step6">
+        <div class="image-container">
+            <div class="image-box">
+                <img src="https://imgur.com/u5zjeyO.jpg" alt="Nossa praia">
+                <p>Nossa praia 🏖️</p>
+            </div>
+            <div class="image-box">
+                <img src="https://imgur.com/dZLJzJx.jpg" alt="Natal com sua família">
+                <p>Natal com sua família 🎄</p>
+            </div>
+        </div>
+        <button onclick="nextStep()">Próximo ➡️</button>
+    </div>
+
+    <div class="container hidden" id="step7">
+        <div class="image-container">
+            <div class="image-box">
+                <img src="https://imgur.com/ZVqBlxV.jpg" alt="Nós dois">
+                <p>Nós dois 💑</p>
+            </div>
+            <div class="image-box">
+                <img src="https://imgur.com/bOKkT1J.jpg" alt="Slime com a maninha">
+                <p>Slime com a maninha 💕</p>
+            </div>
+        </div>
+        <button onclick="showFinalMessage()">Terminar ❤️</button>
+    </div>
+
+    <!-- Última tela -->
+    <div class="container hidden" id="final">
+        <h1>💖 Terminamos esta mensagem, mas a nossa história nunca chega ao fim. 💞</h1>
+        <p>O que sinto por você é uma jornada que não tem 'término', só uma linda caminhada. 🚶‍♂️💖</p>
+    </div>
+
+    <script>
+        let step = 1;
+
+        function nextStep() {
+            document.getElementById(`step${step}`).classList.add("hidden");
+            step++;
+            if (document.getElementById(`step${step}`)) {
+                document.getElementById(`step${step}`).classList.remove("hidden");
+            }
+        }
+
+        function showFinalMessage() {
+            document.getElementById(`step${step}`).classList.add("hidden");
+            document.getElementById("final").classList.remove("hidden");
+
+            setTimeout(() => {
+                alert("Obrigado por fazer parte da minha vida! Você é muito especial para mim. ❤️");
+            }, 1000);
+        }
+
+        function showConfirmation() {
+            document.getElementById("confirmation").classList.remove("hidden");
+        }
+
+        function hideConfirmation() {
+            document.getElementById("confirmation").classList.add("hidden");
+        }
+
+        function startMusic() {
+            document.getElementById("backgroundMusic").play();
+        }
+    </script>
+</body>
+</html>
