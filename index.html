@@ -1,151 +1,1141 @@
-<!DOCTYPE html>
-<html lang="pt">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Você ainda gosta de mim?</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { display: flex; justify-content: center; align-items: center; height: 100vh; background: white; overflow: hidden; text-align: center; }
-        .container { transition: transform 0.6s ease-in-out; position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .hidden { display: none; }
-        button { padding: 10px 20px; margin: 10px; font-size: 18px; cursor: pointer; border: none; background: #ff4081; color: white; border-radius: 5px; }
-        button:hover { background: #e91e63; }
-        .image-container { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 20px; }
-        .image-box { text-align: center; }
-        img { width: 250px; border-radius: 10px; margin-bottom: 10px; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ficha — RPG Moderno (Sobrenatural)</title>
+  <style>
+    :root{
+      --bg:#0b0d12;
+      --panel:#121724;
+      --panel2:#0f1320;
+      --line:rgba(255,255,255,.08);
+      --text:#eaf0ff;
+      --muted:#aab4d6;
+      --muted2:#7b86a9;
+
+      --acc:#7c3aed;     /* roxo */
+      --acc2:#22c55e;    /* verde */
+      --warn:#f59e0b;    /* amarelo */
+      --bad:#ef4444;     /* vermelho */
+
+      --radius:16px;
+      --radius2:12px;
+      --shadow:0 18px 45px rgba(0,0,0,.55);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(124,58,237,.18), transparent 55%),
+        radial-gradient(1000px 800px at 85% 35%, rgba(34,197,94,.12), transparent 55%),
+        radial-gradient(800px 600px at 60% 95%, rgba(245,158,11,.10), transparent 55%),
+        var(--bg);
+      line-height:1.35;
+    }
+
+    .wrap{
+      max-width: 1180px;
+      margin: 26px auto;
+      padding: 0 16px 32px;
+    }
+
+    header{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin-bottom: 14px;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .title{
+      font-size: 20px;
+      letter-spacing:.6px;
+      font-weight: 800;
+    }
+    .subtitle{
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+
+    button, .chip{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      box-shadow: 0 10px 22px rgba(0,0,0,.25);
+      font-weight: 700;
+      font-size: 12px;
+      user-select:none;
+    }
+    button:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.16);
+      background: linear-gradient(180deg, rgba(255,255,255,.085), rgba(255,255,255,.03));
+    }
+    button:active{ transform: translateY(0px) scale(.99); }
+
+    .btn-acc{ border-color: rgba(124,58,237,.35); }
+    .btn-ok{ border-color: rgba(34,197,94,.35); }
+    .btn-warn{ border-color: rgba(245,158,11,.35); }
+    .btn-bad{ border-color: rgba(239,68,68,.35); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 14px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(18,23,36,.92), rgba(15,19,32,.92));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(600px 220px at 20% 0%, rgba(124,58,237,.12), transparent 55%),
+        radial-gradient(600px 220px at 80% 0%, rgba(34,197,94,.10), transparent 55%);
+      pointer-events:none;
+      opacity:.85;
+    }
+    .card > *{ position:relative; }
+
+    .card-hd{
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .card-hd h2{
+      margin:0;
+      font-size: 13px;
+      letter-spacing:.9px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 900;
+    }
+    .card-bd{ padding: 14px; }
+
+    .cols-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .cols-3{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius2);
+      padding: 10px;
+    }
+    .field label{
+      font-size: 11px;
+      letter-spacing:.7px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      font-weight: 800;
+    }
+    input[type="text"], input[type="number"], textarea, select{
+      width:100%;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      padding: 10px 10px;
+      border-radius: 10px;
+      outline:none;
+      font-size: 13px;
+    }
+    textarea{ min-height: 90px; resize: vertical; }
+    input[type="number"]{ font-family: var(--mono); }
+
+    .stat-row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius2);
+      padding: 10px;
+    }
+    .stat-name{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .stat-name b{
+      font-size: 13px;
+      letter-spacing:.4px;
+    }
+    .stat-name span{
+      font-size: 11px;
+      color: var(--muted2);
+    }
+    .stat-val{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 900;
+    }
+    .mini{
+      padding: 8px 10px;
+      font-size: 12px;
+      border-radius: 12px;
+      box-shadow:none;
+    }
+    .mini:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+    .pill{
+      min-width: 46px;
+      text-align:center;
+      padding: 8px 10px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      background: rgba(0,0,0,.18);
+    }
+
+    .track{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .track-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .track-title{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .track-title b{ font-size: 13px; letter-spacing:.3px; }
+    .track-title span{ font-size: 11px; color: var(--muted2); }
+
+    .bar{
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      overflow:hidden;
+      position:relative;
+    }
+    .bar > i{
+      display:block;
+      height:100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(124,58,237,.95), rgba(34,197,94,.85));
+      border-radius: 999px;
+      transition: width .2s ease;
+    }
+    .bar.bad > i{
+      background: linear-gradient(90deg, rgba(245,158,11,.95), rgba(239,68,68,.9));
+    }
+
+    .small-note{
+      color: var(--muted2);
+      font-size: 11px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .skills{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .skill{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,.03);
+    }
+    .skill b{ font-size: 13px; }
+    .skill .val{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      font-family: var(--mono);
+    }
+
+    .muted{
+      color: var(--muted);
+    }
+
+    .roller{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .roller .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .out{
+      padding: 10px;
+      border-radius: var(--radius2);
+      background: rgba(0,0,0,.22);
+      border: 1px dashed rgba(255,255,255,.18);
+      font-family: var(--mono);
+      font-size: 12px;
+      min-height: 44px;
+      white-space: pre-wrap;
+    }
+
+    footer{
+      margin-top: 14px;
+      color: var(--muted2);
+      font-size: 11px;
+      text-align:center;
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .skills{ grid-template-columns: 1fr; }
+      header{ align-items:flex-start; }
+    }
+
+    @media print{
+      body{ background: #fff; color:#000; }
+      .wrap{ max-width:none; margin:0; padding:0; }
+      .card{ box-shadow:none; }
+      header, .top-actions, .no-print{ display:none !important; }
+      input, textarea, select{
+        background:#fff !important;
+        color:#000 !important;
+        border:1px solid #aaa !important;
+      }
+      .card-hd h2{ color:#333 !important; }
+      .small-note, .muted{ color:#444 !important; }
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Música de fundo -->
-    <audio id="backgroundMusic" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
-    </audio>
+  <div class="wrap">
 
-    <!-- Primeira Pergunta -->
-    <div class="container" id="step1">
-        <h1>Você ainda gosta de mim? 🥰💖</h1>
-        <div>
-            <button onclick="startMusic(); nextStep()">Sim 💕</button>
-            <button onclick="showConfirmation()">Não 💔</button>
+    <header>
+      <div class="brand">
+        <div class="title">FICHA — RPG MODERNO (SOBRENATURAL)</div>
+        <div class="subtitle">Sem portal. Sem dependência. Interativa, salva sozinha e imprime em PDF.</div>
+      </div>
+
+      <div class="top-actions no-print">
+        <button class="btn-acc" id="btnSave">Salvar agora</button>
+        <button class="btn-ok" id="btnNew">Nova ficha</button>
+        <button class="btn-warn" id="btnExport">Exportar JSON</button>
+        <button class="btn-warn" id="btnImport">Importar JSON</button>
+        <button class="btn-ok" id="btnPrint">Imprimir / PDF</button>
+      </div>
+    </header>
+
+    <div class="grid">
+
+      <!-- COLUNA ESQUERDA -->
+      <section class="card">
+        <div class="card-hd">
+          <h2>Identidade e Contexto</h2>
+          <span class="small-note">Dica: a ficha salva automaticamente a cada mudança.</span>
         </div>
-        <p id="confirmation" class="hidden">Você tem certeza? 😢 <button onclick="hideConfirmation()">Não 🙃</button></p>
-    </div>
-    
-    <!-- Introdução -->
-    <div class="container hidden" id="step2">
-        <h1>Que tal lembrarmos como isso começou? 💖✨</h1>
-        <button onclick="nextStep()">Continuar ➡️</button>
-    </div>
-    
-    <!-- Imagens e Memórias -->
-    <div class="container hidden" id="step3">
-        <div class="image-container">
-            <div class="image-box">
-                <img src="https://imgur.com/9DZ2c1m.jpg" alt="Primeira vez que saímos">
-                <p>Primeira vez que saímos só nós dois 👫</p>
+        <div class="card-bd">
+          <div class="cols-3">
+            <div class="field">
+              <label>Jogador</label>
+              <input type="text" id="player" placeholder="Nome do jogador" />
             </div>
-            <div class="image-box">
-                <img src="https://imgur.com/ejdntH4.jpg" alt="Primeira vez que dormi na sua casa">
-                <p>Primeira vez que dormi na sua casa 😴</p>
+            <div class="field">
+              <label>Personagem</label>
+              <input type="text" id="name" placeholder="Nome do personagem" />
             </div>
+            <div class="field">
+              <label>Idade</label>
+              <input type="number" id="age" min="0" step="1" placeholder="0" />
+            </div>
+          </div>
+
+          <div class="cols-2" style="margin-top:12px;">
+            <div class="field">
+              <label>Função / Profissão</label>
+              <input type="text" id="role" placeholder="Detetive, estudante, segurança, repórter..." />
+            </div>
+            <div class="field">
+              <label>Vínculo / Motivo</label>
+              <input type="text" id="hook" placeholder="Por que você entrou nisso?" />
+            </div>
+          </div>
+
+          <div class="cols-2" style="margin-top:12px;">
+            <div class="field">
+              <label>Marca do Sobrenatural</label>
+              <input type="text" id="mark" placeholder="O que te seguiu / o que você viu?" />
+            </div>
+            <div class="field">
+              <label>Segredo</label>
+              <input type="text" id="secret" placeholder="Algo que ninguém sabe..." />
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:12px;">
+            <label>Passado em 3 linhas</label>
+            <textarea id="past" placeholder="O que aconteceu antes de tudo ficar estranho?"></textarea>
+          </div>
         </div>
-        <button onclick="nextStep()">Próximo ➡️</button>
-    </div>
+      </section>
 
-    <div class="container hidden" id="step4">
-        <div class="image-container">
-            <div class="image-box">
-                <img src="https://imgur.com/TU7PvIU.jpg" alt="Primeira festa juntos">
-                <p>Primeira festa juntos 🎉</p>
-            </div>
-            <div class="image-box">
-                <img src="https://imgur.com/PXYGsFh.jpg" alt="Primeira vez na casa do seu pai">
-                <p>Primeira vez que fui na casa do seu pai 🏡</p>
-            </div>
+      <!-- COLUNA DIREITA (ROLADOR + REGRAS) -->
+      <aside class="card">
+        <div class="card-hd">
+          <h2>Rolador e Ações</h2>
+          <span class="small-note">Opcional (pra mesa online/pelo celular).</span>
         </div>
-        <button onclick="nextStep()">Próximo ➡️</button>
-    </div>
+        <div class="card-bd">
+          <div class="roller">
+            <div class="row">
+              <div class="field" style="flex:1;">
+                <label>Tipo</label>
+                <select id="diceType">
+                  <option value="d20">d20</option>
+                  <option value="d12">d12</option>
+                  <option value="d10">d10</option>
+                  <option value="d8">d8</option>
+                  <option value="d6">d6</option>
+                  <option value="d4">d4</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
 
-    <div class="container hidden" id="step5">
-        <div class="image-container">
-            <div class="image-box">
-                <img src="https://imgur.com/sOsKpqB.jpg" alt="Seu aniversário de 18 anos">
-                <p>Seu aniversário de 18 🎂</p>
+              <div class="field" style="width:120px;">
+                <label>Qtd</label>
+                <input type="number" id="diceQty" min="1" step="1" value="1">
+              </div>
+
+              <div class="field" style="width:160px;">
+                <label>Bônus</label>
+                <input type="number" id="diceBonus" step="1" value="0">
+              </div>
+
+              <div class="field" id="customWrap" style="display:none; width:140px;">
+                <label>Lados</label>
+                <input type="number" id="customSides" min="2" step="1" value="6">
+              </div>
+
+              <button class="btn-acc" id="btnRoll">Rolar</button>
+              <button class="btn-bad" id="btnClearLog">Limpar</button>
             </div>
-            <div class="image-box">
-                <img src="https://imgur.com/cNsRdBC.jpg" alt="Nós no ju cuidando da maninha">
-                <p>Nós no ju cuidando da maninha ❤️</p>
+
+            <div class="out" id="rollLog">Log de rolagens...</div>
+
+            <div class="small-note">
+              <b>Formato sugerido:</b> teste = d20 + Atributo + Perícia.  
+              Em cenas sobrenaturais, o mestre pode pedir: <i>Medo</i> ou <i>Estabilidade</i>.
             </div>
+          </div>
         </div>
-        <button onclick="nextStep()">Próximo ➡️</button>
-    </div>
+      </aside>
 
-    <div class="container hidden" id="step6">
-        <div class="image-container">
-            <div class="image-box">
-                <img src="https://imgur.com/u5zjeyO.jpg" alt="Nossa praia">
-                <p>Nossa praia 🏖️</p>
-            </div>
-            <div class="image-box">
-                <img src="https://imgur.com/dZLJzJx.jpg" alt="Natal com sua família">
-                <p>Natal com sua família 🎄</p>
-            </div>
+      <!-- ATRIBUTOS + TRILHAS -->
+      <section class="card">
+        <div class="card-hd">
+          <h2>Atributos e Trilhas</h2>
+          <span class="small-note">Use -2 a +4 (ou do seu jeito).</span>
         </div>
-        <button onclick="nextStep()">Próximo ➡️</button>
-    </div>
+        <div class="card-bd">
 
-    <div class="container hidden" id="step7">
-        <div class="image-container">
-            <div class="image-box">
-                <img src="https://imgur.com/ZVqBlxV.jpg" alt="Nós dois">
-                <p>Nós dois 💑</p>
+          <div class="list">
+            <div class="stat-row">
+              <div class="stat-name">
+                <b>Mente</b>
+                <span>lógica, foco, análise</span>
+              </div>
+              <div class="stat-val">
+                <button class="mini" data-step="-1" data-target="att_mind">–</button>
+                <span class="pill" id="att_mind">0</span>
+                <button class="mini" data-step="1" data-target="att_mind">+</button>
+              </div>
             </div>
-            <div class="image-box">
-                <img src="https://imgur.com/bOKkT1J.jpg" alt="Slime com a maninha">
-                <p>Slime com a maninha 💕</p>
+
+            <div class="stat-row">
+              <div class="stat-name">
+                <b>Corpo</b>
+                <span>força, resistência, correr</span>
+              </div>
+              <div class="stat-val">
+                <button class="mini" data-step="-1" data-target="att_body">–</button>
+                <span class="pill" id="att_body">0</span>
+                <button class="mini" data-step="1" data-target="att_body">+</button>
+              </div>
             </div>
+
+            <div class="stat-row">
+              <div class="stat-name">
+                <b>Reflexo</b>
+                <span>destreza, furtividade, mira</span>
+              </div>
+              <div class="stat-val">
+                <button class="mini" data-step="-1" data-target="att_reflex">–</button>
+                <span class="pill" id="att_reflex">0</span>
+                <button class="mini" data-step="1" data-target="att_reflex">+</button>
+              </div>
+            </div>
+
+            <div class="stat-row">
+              <div class="stat-name">
+                <b>Presença</b>
+                <span>carisma, intimidação, lábia</span>
+              </div>
+              <div class="stat-val">
+                <button class="mini" data-step="-1" data-target="att_presence">–</button>
+                <span class="pill" id="att_presence">0</span>
+                <button class="mini" data-step="1" data-target="att_presence">+</button>
+              </div>
+            </div>
+
+            <div class="stat-row">
+              <div class="stat-name">
+                <b>Instinto</b>
+                <span>intuição, percepção, pressentir</span>
+              </div>
+              <div class="stat-val">
+                <button class="mini" data-step="-1" data-target="att_instinct">–</button>
+                <span class="pill" id="att_instinct">0</span>
+                <button class="mini" data-step="1" data-target="att_instinct">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="split" style="margin-top:14px;">
+
+            <div class="field">
+              <label>Medo (0–10)</label>
+              <div class="track">
+                <div class="track-top">
+                  <div class="track-title">
+                    <b>Medo</b>
+                    <span>aumenta quando o impossível aparece</span>
+                  </div>
+                  <div class="stat-val">
+                    <button class="mini btn-warn" data-track="-1" data-max="10" data-id="fear">–</button>
+                    <span class="pill" id="fear_val">0</span>
+                    <button class="mini btn-warn" data-track="1" data-max="10" data-id="fear">+</button>
+                  </div>
+                </div>
+                <div class="bar bad"><i id="fear_bar"></i></div>
+                <div class="small-note">Em 10: pânico / colapso (o mestre define).</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Estabilidade (0–10)</label>
+              <div class="track">
+                <div class="track-top">
+                  <div class="track-title">
+                    <b>Estabilidade</b>
+                    <span>cai quando você entende demais</span>
+                  </div>
+                  <div class="stat-val">
+                    <button class="mini btn-acc" data-track="-1" data-max="10" data-id="stability">–</button>
+                    <span class="pill" id="stability_val">10</span>
+                    <button class="mini btn-acc" data-track="1" data-max="10" data-id="stability">+</button>
+                  </div>
+                </div>
+                <div class="bar"><i id="stability_bar"></i></div>
+                <div class="small-note">Em 0: ruptura (mudança permanente).</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="split" style="margin-top:12px;">
+
+            <div class="field">
+              <label>Ferimentos (0–6)</label>
+              <div class="track">
+                <div class="track-top">
+                  <div class="track-title">
+                    <b>Ferimentos</b>
+                    <span>machucados, cortes, fraturas</span>
+                  </div>
+                  <div class="stat-val">
+                    <button class="mini btn-bad" data-track="-1" data-max="6" data-id="harm">–</button>
+                    <span class="pill" id="harm_val">0</span>
+                    <button class="mini btn-bad" data-track="1" data-max="6" data-id="harm">+</button>
+                  </div>
+                </div>
+                <div class="bar bad"><i id="harm_bar"></i></div>
+                <div class="small-note">Em 6: fora de combate (ou pior).</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Exposição (0–6)</label>
+              <div class="track">
+                <div class="track-top">
+                  <div class="track-title">
+                    <b>Exposição</b>
+                    <span>o quanto o sobrenatural te “reconhece”</span>
+                  </div>
+                  <div class="stat-val">
+                    <button class="mini btn-ok" data-track="-1" data-max="6" data-id="exposure">–</button>
+                    <span class="pill" id="exposure_val">0</span>
+                    <button class="mini btn-ok" data-track="1" data-max="6" data-id="exposure">+</button>
+                  </div>
+                </div>
+                <div class="bar"><i id="exposure_bar"></i></div>
+                <div class="small-note">Alto: “coincidências” começam a te encontrar.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="split" style="margin-top:12px;">
+            <div class="field">
+              <label>Traumas (curto)</label>
+              <textarea id="traumas" placeholder="Ex.: claustrofobia, paranoia, desconfiança..."></textarea>
+            </div>
+            <div class="field">
+              <label>Manias / Regras pessoais</label>
+              <textarea id="quirks" placeholder="Ex.: não olha espelho à noite, não fala nomes..."></textarea>
+            </div>
+          </div>
+
         </div>
-        <button onclick="showFinalMessage()">Terminar ❤️</button>
+      </section>
+
+      <!-- PERÍCIAS -->
+      <section class="card">
+        <div class="card-hd">
+          <h2>Perícias</h2>
+          <span class="small-note">Sugestão: 0 a 3. Clique +/–.</span>
+        </div>
+        <div class="card-bd">
+
+          <div class="skills" id="skills"></div>
+
+          <div class="small-note" style="margin-top:12px;">
+            Você pode renomear perícias se quiser — o importante é ficar “investigativo + sobrevivência”.
+          </div>
+
+        </div>
+      </section>
+
+      <!-- INVENTÁRIO / PISTAS / CONTATOS / ANOTAÇÕES -->
+      <section class="card" style="grid-column: 1 / -1;">
+        <div class="card-hd">
+          <h2>Inventário, Pistas e Anotações</h2>
+          <span class="small-note">Tudo aqui é “o coração” do mistério.</span>
+        </div>
+        <div class="card-bd">
+
+          <div class="cols-2">
+            <div class="field">
+              <label>Inventário</label>
+              <textarea id="inventory" placeholder="- lanterna
+- isqueiro
+- fita adesiva
+- chave desconhecida..."></textarea>
+            </div>
+
+            <div class="field">
+              <label>Pistas e Segredos</label>
+              <textarea id="clues" placeholder="- a porta não aparece em foto
+- o relógio para às 03:33
+- alguém escreveu meu nome no livro..."></textarea>
+            </div>
+          </div>
+
+          <div class="cols-2" style="margin-top:12px;">
+            <div class="field">
+              <label>Contatos</label>
+              <textarea id="contacts" placeholder="- Dra. Elisa (médica)
+- Ícaro (hacker)
+- Sgt. Moraes (polícia)..."></textarea>
+            </div>
+
+            <div class="field">
+              <label>Anotações do Jogador</label>
+              <textarea id="notes" placeholder="Teorias, planos, suspeitos, rotas..."></textarea>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
     </div>
 
-    <!-- Última tela -->
-    <div class="container hidden" id="final">
-        <h1>💖 Terminamos esta mensagem, mas a nossa história nunca chega ao fim. 💞</h1>
-        <p>O que sinto por você é uma jornada que não tem 'término', só uma linda caminhada. 🚶‍♂️💖</p>
-    </div>
+    <footer>
+      Feito para RPG moderno + sobrenatural. Arquivo único (HTML). Salva localmente no seu navegador.
+    </footer>
+  </div>
 
-    <script>
-        let step = 1;
+  <input type="file" id="importFile" accept="application/json" style="display:none" />
 
-        function nextStep() {
-            document.getElementById(`step${step}`).classList.add("hidden");
-            step++;
-            if (document.getElementById(`step${step}`)) {
-                document.getElementById(`step${step}`).classList.remove("hidden");
-            }
+  <script>
+    // ====== CONFIG ======
+    const STORAGE_KEY = "ficha_moderno_sobrenatural_v1";
+
+    const skillList = [
+      ["Investigação", "procurar pistas / deduzir"],
+      ["Percepção", "notar detalhes / ouvir"],
+      ["Furtividade", "sumir / seguir"],
+      ["Atletismo", "correr / escalar"],
+      ["Medicina", "primeiros socorros"],
+      ["Tecnologia", "hack / eletrônica"],
+      ["Persuasão", "convencer / negociar"],
+      ["Intimidação", "ameaçar / pressionar"],
+      ["Conhecimento", "história / oculto"],
+      ["Sobrevivência", "improviso / trilha"]
+    ];
+
+    // ====== HELPERS ======
+    const $ = (id) => document.getElementById(id);
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function setText(elId, value){
+      const el = $(elId);
+      if (el) el.textContent = String(value);
+    }
+
+    function getText(elId){
+      const el = $(elId);
+      return el ? el.textContent : "";
+    }
+
+    function updateBar(barId, value, max){
+      const el = $(barId);
+      if(!el) return;
+      const pct = (clamp(value, 0, max) / max) * 100;
+      el.style.width = pct + "%";
+    }
+
+    // ====== BUILD SKILLS UI ======
+    function buildSkills(){
+      const box = $("skills");
+      box.innerHTML = "";
+      skillList.forEach(([name, hint], idx) => {
+        const id = "sk_" + idx;
+
+        const wrap = document.createElement("div");
+        wrap.className = "skill";
+
+        const left = document.createElement("div");
+        left.innerHTML = `<b contenteditable="true" spellcheck="false" data-skillname="${id}">${name}</b>
+                          <div class="muted" style="font-size:11px;">${hint}</div>`;
+
+        const right = document.createElement("div");
+        right.className = "val";
+
+        const btnMinus = document.createElement("button");
+        btnMinus.className = "mini";
+        btnMinus.textContent = "–";
+        btnMinus.addEventListener("click", () => bumpSkill(id, -1));
+
+        const pill = document.createElement("span");
+        pill.className = "pill";
+        pill.id = id;
+        pill.textContent = "0";
+
+        const btnPlus = document.createElement("button");
+        btnPlus.className = "mini";
+        btnPlus.textContent = "+";
+        btnPlus.addEventListener("click", () => bumpSkill(id, 1));
+
+        right.append(btnMinus, pill, btnPlus);
+        wrap.append(left, right);
+        box.appendChild(wrap);
+      });
+
+      // salvar quando renomear perícia
+      box.querySelectorAll("[data-skillname]").forEach(el=>{
+        el.addEventListener("input", saveToStorageDebounced);
+      });
+    }
+
+    function bumpSkill(id, delta){
+      const current = parseInt(getText(id) || "0", 10);
+      const next = clamp(current + delta, 0, 6);
+      setText(id, next);
+      saveToStorageDebounced();
+    }
+
+    // ====== ATTR +/- ======
+    function bumpTextPill(targetId, delta){
+      const current = parseInt(getText(targetId) || "0", 10);
+      const next = clamp(current + delta, -6, 6);
+      setText(targetId, next);
+      saveToStorageDebounced();
+    }
+
+    // ====== TRACKS ======
+    const tracks = {
+      fear:      { valId:"fear_val", barId:"fear_bar", max:10, min:0, default:0 },
+      stability: { valId:"stability_val", barId:"stability_bar", max:10, min:0, default:10 },
+      harm:      { valId:"harm_val", barId:"harm_bar", max:6,  min:0, default:0 },
+      exposure:  { valId:"exposure_val", barId:"exposure_bar", max:6, min:0, default:0 },
+    };
+
+    function bumpTrack(key, delta){
+      const t = tracks[key];
+      const current = parseInt(getText(t.valId) || String(t.default), 10);
+      const next = clamp(current + delta, t.min, t.max);
+      setText(t.valId, next);
+      updateBar(t.barId, next, t.max);
+      saveToStorageDebounced();
+    }
+
+    function refreshTracks(){
+      Object.entries(tracks).forEach(([key, t])=>{
+        const v = parseInt(getText(t.valId) || String(t.default), 10);
+        updateBar(t.barId, v, t.max);
+      });
+    }
+
+    // ====== SAVE/LOAD ======
+    function collectData(){
+      const data = {
+        player: $("player").value,
+        name: $("name").value,
+        age: $("age").value,
+        role: $("role").value,
+        hook: $("hook").value,
+        mark: $("mark").value,
+        secret: $("secret").value,
+        past: $("past").value,
+
+        attrs: {
+          mind: getText("att_mind"),
+          body: getText("att_body"),
+          reflex: getText("att_reflex"),
+          presence: getText("att_presence"),
+          instinct: getText("att_instinct"),
+        },
+
+        tracks: {
+          fear: getText(tracks.fear.valId),
+          stability: getText(tracks.stability.valId),
+          harm: getText(tracks.harm.valId),
+          exposure: getText(tracks.exposure.valId),
+        },
+
+        traumas: $("traumas").value,
+        quirks: $("quirks").value,
+
+        skills: skillList.map((_, idx) => ({
+          name: document.querySelector(`[data-skillname="sk_${idx}"]`)?.textContent?.trim() || "",
+          value: getText("sk_"+idx)
+        })),
+
+        inventory: $("inventory").value,
+        clues: $("clues").value,
+        contacts: $("contacts").value,
+        notes: $("notes").value,
+
+        version: 1,
+        savedAt: new Date().toISOString()
+      };
+      return data;
+    }
+
+    function applyData(data){
+      $("player").value = data.player || "";
+      $("name").value = data.name || "";
+      $("age").value = data.age || "";
+      $("role").value = data.role || "";
+      $("hook").value = data.hook || "";
+      $("mark").value = data.mark || "";
+      $("secret").value = data.secret || "";
+      $("past").value = data.past || "";
+
+      setText("att_mind", data.attrs?.mind ?? "0");
+      setText("att_body", data.attrs?.body ?? "0");
+      setText("att_reflex", data.attrs?.reflex ?? "0");
+      setText("att_presence", data.attrs?.presence ?? "0");
+      setText("att_instinct", data.attrs?.instinct ?? "0");
+
+      setText(tracks.fear.valId, data.tracks?.fear ?? String(tracks.fear.default));
+      setText(tracks.stability.valId, data.tracks?.stability ?? String(tracks.stability.default));
+      setText(tracks.harm.valId, data.tracks?.harm ?? String(tracks.harm.default));
+      setText(tracks.exposure.valId, data.tracks?.exposure ?? String(tracks.exposure.default));
+
+      $("traumas").value = data.traumas || "";
+      $("quirks").value = data.quirks || "";
+
+      // skills
+      (data.skills || []).forEach((s, idx)=>{
+        const nameEl = document.querySelector(`[data-skillname="sk_${idx}"]`);
+        if(nameEl && s.name) nameEl.textContent = s.name;
+        if($("sk_"+idx) && typeof s.value !== "undefined") setText("sk_"+idx, s.value);
+      });
+
+      $("inventory").value = data.inventory || "";
+      $("clues").value = data.clues || "";
+      $("contacts").value = data.contacts || "";
+      $("notes").value = data.notes || "";
+
+      refreshTracks();
+    }
+
+    function saveToStorage(){
+      const data = collectData();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      toast("Salvo ✔");
+    }
+
+    let _saveTimer = null;
+    function saveToStorageDebounced(){
+      clearTimeout(_saveTimer);
+      _saveTimer = setTimeout(()=>{
+        const data = collectData();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }, 250);
+    }
+
+    function loadFromStorage(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return false;
+      try{
+        const data = JSON.parse(raw);
+        applyData(data);
+        return true;
+      }catch(e){
+        console.warn(e);
+        return false;
+      }
+    }
+
+    function clearSheet(){
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+
+    // ====== EXPORT/IMPORT ======
+    function exportJSON(){
+      const data = collectData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const safeName = (data.name || "personagem").replace(/[^\w\-]+/g,"_");
+      a.download = `ficha_${safeName}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function importJSONFile(file){
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const data = JSON.parse(reader.result);
+          applyData(data);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(collectData()));
+          toast("Importado ✔");
+        }catch(e){
+          alert("Arquivo inválido (JSON).");
         }
+      };
+      reader.readAsText(file);
+    }
 
-        function showFinalMessage() {
-            document.getElementById(`step${step}`).classList.add("hidden");
-            document.getElementById("final").classList.remove("hidden");
+    // ====== DICE ======
+    function roll(nSides, qty, bonus){
+      const rolls = [];
+      let sum = 0;
+      for(let i=0;i<qty;i++){
+        const r = Math.floor(Math.random()*nSides)+1;
+        rolls.push(r);
+        sum += r;
+      }
+      const total = sum + bonus;
+      return {rolls, sum, bonus, total};
+    }
 
-            setTimeout(() => {
-                alert("Obrigado por fazer parte da minha vida! Você é muito especial para mim. ❤️");
-            }, 1000);
-        }
+    function logRoll(text){
+      const log = $("rollLog");
+      if(log.textContent.trim() === "Log de rolagens...") log.textContent = "";
+      log.textContent = text + "\n" + log.textContent;
+    }
 
-        function showConfirmation() {
-            document.getElementById("confirmation").classList.remove("hidden");
-        }
+    // ====== TOAST ======
+    let toastTimer = null;
+    function toast(msg){
+      clearTimeout(toastTimer);
+      let el = document.getElementById("toast");
+      if(!el){
+        el = document.createElement("div");
+        el.id = "toast";
+        el.style.position = "fixed";
+        el.style.right = "14px";
+        el.style.bottom = "14px";
+        el.style.zIndex = "9999";
+        el.style.padding = "10px 12px";
+        el.style.borderRadius = "12px";
+        el.style.border = "1px solid rgba(255,255,255,.14)";
+        el.style.background = "rgba(15,19,32,.92)";
+        el.style.color = "white";
+        el.style.boxShadow = "0 14px 30px rgba(0,0,0,.55)";
+        el.style.fontWeight = "800";
+        el.style.fontSize = "12px";
+        el.style.letterSpacing = ".3px";
+        document.body.appendChild(el);
+      }
+      el.textContent = msg;
+      el.style.opacity = "1";
+      toastTimer = setTimeout(()=>{ el.style.opacity = "0"; }, 900);
+    }
 
-        function hideConfirmation() {
-            document.getElementById("confirmation").classList.add("hidden");
-        }
+    // ====== INIT ======
+    buildSkills();
 
-        function startMusic() {
-            document.getElementById("backgroundMusic").play();
-        }
-    </script>
+    // Wire: attr buttons
+    document.querySelectorAll("[data-step][data-target]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const delta = parseInt(btn.getAttribute("data-step"), 10);
+        const target = btn.getAttribute("data-target");
+        bumpTextPill(target, delta);
+      });
+    });
+
+    // Wire: tracks
+    document.querySelectorAll("[data-track][data-id]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const delta = parseInt(btn.getAttribute("data-track"), 10);
+        const id = btn.getAttribute("data-id");
+        bumpTrack(id, delta);
+      });
+    });
+
+    // Auto-save on inputs
+    const inputs = document.querySelectorAll("input, textarea, select");
+    inputs.forEach(el=>{
+      el.addEventListener("input", saveToStorageDebounced);
+      el.addEventListener("change", saveToStorageDebounced);
+    });
+
+    // Dice type custom
+    $("diceType").addEventListener("change", ()=>{
+      const isCustom = $("diceType").value === "custom";
+      $("customWrap").style.display = isCustom ? "block" : "none";
+    });
+
+    $("btnRoll").addEventListener("click", ()=>{
+      const type = $("diceType").value;
+      const qty = clamp(parseInt($("diceQty").value || "1", 10), 1, 50);
+      const bonus = parseInt($("diceBonus").value || "0", 10);
+
+      let sides = 20;
+      if(type === "custom"){
+        sides = clamp(parseInt($("customSides").value || "6", 10), 2, 1000);
+      } else {
+        sides = parseInt(type.replace("d",""), 10);
+      }
+
+      const r = roll(sides, qty, bonus);
+      const stamp = new Date().toLocaleTimeString();
+      logRoll(`[${stamp}] ${qty}d${sides} ${bonus>=0?"+":""}${bonus}  →  [${r.rolls.join(", ")}] = ${r.sum}  →  TOTAL ${r.total}`);
+    });
+
+    $("btnClearLog").addEventListener("click", ()=>{
+      $("rollLog").textContent = "Log de rolagens...";
+    });
+
+    // Buttons top
+    $("btnSave").addEventListener("click", saveToStorage);
+
+    $("btnNew").addEventListener("click", ()=>{
+      if(confirm("Criar uma ficha nova? Isso apaga a ficha salva neste navegador.")){
+        clearSheet();
+      }
+    });
+
+    $("btnExport").addEventListener("click", exportJSON);
+
+    $("btnImport").addEventListener("click", ()=>{
+      $("importFile").click();
+    });
+
+    $("importFile").addEventListener("change", (e)=>{
+      const file = e.target.files && e.target.files[0];
+      if(file) importJSONFile(file);
+      e.target.value = "";
+    });
+
+    $("btnPrint").addEventListener("click", ()=>{
+      window.print();
+    });
+
+    // Load existing save (or init defaults)
+    const loaded = loadFromStorage();
+    if(!loaded){
+      // defaults for bars
+      setText("stability_val", tracks.stability.default);
+      refreshTracks();
+      saveToStorageDebounced();
+    } else {
+      refreshTracks();
+    }
+  </script>
 </body>
 </html>
