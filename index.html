@@ -485,8 +485,9 @@
 
   .scene-images {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
     margin-bottom: 36px;
   }
   .scene-images figure {
@@ -495,24 +496,48 @@
     border: 1px solid var(--gray);
     background: var(--dark2);
   }
+  .scene-images figure.full-col {
+    grid-row: span 2;
+  }
   .scene-images img {
     width: 100%;
-    height: 180px;
+    height: 220px;
     object-fit: cover;
     display: block;
-    filter: grayscale(30%) contrast(1.1);
+    filter: grayscale(20%) contrast(1.1);
     transition: filter 0.3s;
   }
+  .scene-images figure.full-col img {
+    height: 100%;
+    min-height: 300px;
+  }
+  .scene-images img.crop-top { object-position: center top; }
+  .scene-images img.crop-bottom { object-position: center bottom; }
   .scene-images img:hover { filter: grayscale(0%) contrast(1.2); }
   .scene-images figcaption {
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
+    font-size: 0.82rem;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--gold);
-    padding: 8px 10px;
+    padding: 9px 10px;
     background: var(--dark2);
     text-align: center;
     border-top: 1px solid var(--gray);
+  }
+  @media (max-width: 520px) {
+    .scene-images {
+      grid-template-columns: 1fr;
+    }
+    .scene-images figure.full-col {
+      grid-row: span 1;
+    }
+    .scene-images figure.full-col img {
+      height: 280px;
+      min-height: unset;
+    }
+    .scene-images img {
+      height: 220px;
+    }
   }
 
   .report-text {
@@ -875,14 +900,29 @@
      RESPONSIVE
   ═══════════════════════════════ */
   @media (max-width: 480px) {
+    body { font-size: 19px; }
     .modal-box { padding: 28px 20px; }
+    .modal-title { font-size: 1.6rem; }
     .case-card { padding: 22px 18px; }
+    .case-desc { font-size: 1.05rem; }
+    .roles-list .role-chip { font-size: 0.9rem; padding: 5px 13px; }
     .safe-card { padding: 22px 16px; }
+    .safe-title { font-size: 1.05rem; }
+    .safe-type { font-size: 0.88rem; }
+    .safe-input { font-size: 1.4rem; }
+    .btn-safe, .btn-evidence { font-size: 0.88rem; padding: 12px 16px; }
     .role-card { padding: 28px 20px; }
-    .report-text { columns: 1; font-size: 1rem; }
-    .scene-images img { height: 140px; }
+    .report-text { columns: 1; font-size: 1.1rem; }
+    .highlight-box { font-size: 1.05rem; }
+    .evidence-items li { font-size: 1.05rem; padding: 7px 0 7px 22px; }
     .site-header { padding: 10px 14px; }
-    .btn { padding: 12px 22px; font-size: 0.8rem; }
+    .btn { padding: 13px 24px; font-size: 0.88rem; }
+    .player-bar { font-size: 0.88rem; }
+    .form-group input, .form-group select { font-size: 1.05rem; padding: 13px 14px; }
+    .form-group label { font-size: 0.8rem; }
+    .safe-number { font-size: 0.75rem; }
+    .case-meta .tag { font-size: 0.8rem; padding: 5px 11px; }
+    .case-roles-label { font-size: 0.82rem; }
   }
 </style>
 </head>
@@ -998,17 +1038,17 @@
 
   <div class="case-body">
     <div class="scene-images">
+      <figure class="full-col">
+        <img src="reportagem.png" alt="Reportagem do caso" onerror="this.parentElement.style.display='none'">
+        <figcaption>Dossi&ecirc; &mdash; Reportagem</figcaption>
+      </figure>
       <figure>
-        <img src="crime.jpg" alt="Cena do crime" onerror="this.parentElement.style.display='none'">
+        <img src="crime.png" alt="Cena do crime" class="crop-top" onerror="this.parentElement.style.display='none'">
         <figcaption>Cena do crime</figcaption>
       </figure>
       <figure>
-        <img src="mesa.jpg" alt="Mesa da vítima" onerror="this.parentElement.style.display='none'">
-        <figcaption>Mesa da vítima</figcaption>
-      </figure>
-      <figure>
-        <img src="reportagem.jpg" alt="Reportagem" onerror="this.parentElement.style.display='none'">
-        <figcaption>Cobertura da imprensa</figcaption>
+        <img src="crime.png" alt="Itens sobre a mesa" class="crop-bottom" onerror="this.parentElement.style.display='none'">
+        <figcaption>Itens sobre a mesa</figcaption>
       </figure>
     </div>
 
@@ -1053,7 +1093,7 @@
       <div class="safe-card" id="safe-card-1">
         <div class="safe-number">Cofre 01</div>
         <div class="safe-title">Arquivo Visual</div>
-        <div class="safe-type">Evidência fotográfica</div>
+        <div class="safe-type">Imagem de câmera de segurança</div>
         <span class="safe-icon">🔒</span>
         <div class="safe-input-group">
           <input type="text" class="safe-input" id="code-1" maxlength="6" placeholder="000000" inputmode="numeric">
@@ -1066,8 +1106,8 @@
       <!-- Cofre 02 -->
       <div class="safe-card" id="safe-card-2">
         <div class="safe-number">Cofre 02</div>
-        <div class="safe-title">Arquivo de Áudio</div>
-        <div class="safe-type">Evidência sonora</div>
+        <div class="safe-title">Arquivo de Imagem</div>
+        <div class="safe-type">Documento encontrado na cena</div>
         <span class="safe-icon">🔒</span>
         <div class="safe-input-group">
           <input type="text" class="safe-input" id="code-2" maxlength="6" placeholder="000000" inputmode="numeric">
@@ -1080,8 +1120,8 @@
       <!-- Cofre 03 -->
       <div class="safe-card" id="safe-card-3">
         <div class="safe-number">Cofre 03</div>
-        <div class="safe-title">Arquivo de Vídeo</div>
-        <div class="safe-type">Evidência audiovisual</div>
+        <div class="safe-title">Arquivo de Imagem</div>
+        <div class="safe-type">Registro digital da vítima</div>
         <span class="safe-icon">🔒</span>
         <div class="safe-input-group">
           <input type="text" class="safe-input" id="code-3" maxlength="6" placeholder="000000" inputmode="numeric">
@@ -1134,21 +1174,21 @@ const state = {
 const EVIDENCE = {
   1: {
     number: 'Evidência 01',
-    title: 'Fotografia da Cena',
+    title: 'Imagem de Câmera de Segurança',
     type: 'image',
-    src: 'pista1.jpg'
+    src: 'pista1.png'
   },
   2: {
     number: 'Evidência 02',
-    title: 'Gravação de Áudio',
-    type: 'audio',
-    src: 'audio-pista.mp3'
+    title: 'Recibo do Restaurante do Hotel',
+    type: 'image',
+    src: 'pista2.png'
   },
   3: {
     number: 'Evidência 03',
-    title: 'Gravação de Vídeo',
-    type: 'video',
-    src: 'video-pista.mp4'
+    title: 'Última Mensagem da Vítima',
+    type: 'image',
+    src: 'pista3.png'
   }
 };
 
